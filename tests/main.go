@@ -4,20 +4,34 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/apex/log"
 	"gitlab.com/asenasystem-opensource/go/thingsboard"
 )
 
 func main() {
 
-	tbHost := os.Getenv("TB_HOST")
-	tbUser := os.Getenv("TB_USER")
-	tbPass := os.Getenv("TB_PASS")
+	host := os.Getenv("TB_HOST")
+	user := os.Getenv("TB_USER")
+	pass := os.Getenv("TB_PASS")
 
-	tb, err := thingsboard.New(tbHost, tbUser, tbPass)
+	if host == "" {
+		log.Error("TB_HOST missing")
+		os.Exit(1)
+	}
+	if user == "" {
+		log.Error("TB_USER missing")
+		os.Exit(1)
+	}
+	if pass == "" {
+		log.Error("TB_PASS missing")
+		os.Exit(1)
+	}
+
+	tb, err := thingsboard.New(host, user, pass)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(tb)
+	tb.AuthLogout()
 
 }

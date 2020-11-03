@@ -1,10 +1,6 @@
 package thingsboard
 
-import (
-	"fmt"
-
-	"github.com/go-resty/resty/v2"
-)
+import "fmt"
 
 // Auth Controller -> auth-controller
 // https://demo.thingsboard.io/swagger-ui.html#/auth-controller
@@ -25,20 +21,36 @@ type Auth struct {
 	RefreshToken string
 }
 
-// AuthLogin /api/auth/login
+// AuthLogin /api/auth/login [POST]
 // https://thingsboard.io/docs/reference/rest-api/
 func (tb *Thingsboard) AuthLogin() error {
 
-	r := resty.New()
-	resp, err := r.R().
+	a := Auth{}
+
+	_, err := tb.resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(`{"username":"` + tb.user + `", "password":"` + tb.pass + `"}`).
-		SetResult(Auth{}). // or SetResult(&AuthSuccess{}).
+		SetResult(&a). // or SetResult(&AuthSuccess{}).
 		Post(tb.apiHost + "/auth/login")
 
-	fmt.Println(resp)
+	tb.resty.SetAuthToken(a.Token)
+	// tb.resty.SetAuthScheme("Bearer")
+	tb.Auth = &a
 
 	return err
 }
 
-func logout() {}
+// AuthLogout /api/auth/logout [POST]
+// https://demo.thingsboard.io/swagger-ui.html#!/auth-controller/logoutUsingPOST
+func (tb *Thingsboard) AuthLogout() error {
+
+	fmt.Println(tb.resty.Token)
+	fmt.Println(tb.resty.AuthScheme)
+	r, err := tb.resty.R().
+		Post(tb.apiHost + "/auth/logout")
+
+	fmt.Println(r)
+
+	return err
+
+}

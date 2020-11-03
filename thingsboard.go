@@ -4,6 +4,8 @@
 package thingsboard
 
 import (
+	"strings"
+
 	"github.com/go-resty/resty/v2"
 )
 
@@ -15,7 +17,7 @@ type Thingsboard struct {
 	pass    string
 	host    string
 	apiHost string
-	auth    Auth
+	Auth    *Auth
 	resty   *resty.Client
 }
 
@@ -29,13 +31,24 @@ func New(host string, user string, pass string) (*Thingsboard, error) {
 		apiHost: host + "/api",
 	}
 
-	// RESTy v2 client
-	// https://github.com/go-resty/resty/v2
+	// RESTy v2: Client - https://github.com/go-resty/resty/v2
 	tb.resty = resty.New()
+
+	// RESTy v2: Append middleware function to set proper X-Authorization header.
+	// https://github.com/go-resty/resty/blob/master/client.go#L359
+	tb.resty.OnBeforeRequest(func(c *resty.Client, r *resty.Request) error {
+		c.Header.Set("X-Authorization", "Bearer "+c.Token)
+		return nil
+	})
 
 	err := tb.AuthLogin()
 	if err != nil {
 		return nil, err
 	}
 	return &tb, err
+}
+
+// IsStringEmpty method tells whether given string is empty or not
+func IsStringEmpty(str string) bool {
+	return len(strings.TrimSpace(str)) == 0
 }
