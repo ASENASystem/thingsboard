@@ -21,7 +21,7 @@ type Auth struct {
 	RefreshToken string
 }
 
-// AuthLogin /api/auth/login [POST]
+// AuthLogin [POST] /api/auth/login
 // https://thingsboard.io/docs/reference/rest-api/
 func (tb *Thingsboard) AuthLogin() error {
 
@@ -34,23 +34,19 @@ func (tb *Thingsboard) AuthLogin() error {
 		Post(tb.apiHost + "/auth/login")
 
 	tb.resty.SetAuthToken(a.Token)
-	// tb.resty.SetAuthScheme("Bearer")
 	tb.Auth = &a
 
 	return err
 }
 
-// AuthLogout /api/auth/logout [POST]
+// AuthLogout [POST] /api/auth/logout
 // https://demo.thingsboard.io/swagger-ui.html#!/auth-controller/logoutUsingPOST
+// How it works? Does it work at all? :D
 func (tb *Thingsboard) AuthLogout() error {
 
-	fmt.Println(tb.resty.Token)
-	fmt.Println(tb.resty.AuthScheme)
 	r, err := tb.resty.R().
 		Post(tb.apiHost + "/auth/logout")
-
 	fmt.Println(r)
-
 	return err
 
 }

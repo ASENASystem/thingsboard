@@ -32,6 +32,8 @@ func main() {
 		fmt.Println(err)
 	}
 
+	fmt.Println("Bearer " + tb.Auth.Token)
+
 	tb.AuthLogout()
 
 }
