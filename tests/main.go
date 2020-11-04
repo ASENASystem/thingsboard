@@ -27,7 +27,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	tb, err := thingsboard.New(host, user, pass)
+	tb, err := thingsboard.Connect(host, user, pass)
 	if err != nil {
 		fmt.Println(err)
 	}

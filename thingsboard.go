@@ -22,7 +22,7 @@ type Thingsboard struct {
 }
 
 // New returns Thingsboard instance
-func New(host string, user string, pass string) (*Thingsboard, error) {
+func Connect(host string, user string, pass string) (*Thingsboard, error) {
 
 	tb := Thingsboard{
 		user:    user,
