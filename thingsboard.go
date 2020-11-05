@@ -4,7 +4,7 @@
 
 // https://thingsboard.io/docs/user-guide/entities-and-relations/
 // Entities Overview
-// ThingsBoard provides the user interface and REST APIs to provision and manage multiple entity types and their relations in your IoT application. Supported entities are:
+// Thingsboard provides the user interface and REST APIs to provision and manage multiple entity types and their relations in your IoT application. Supported entities are:
 
 // Tenants - you can treat tenant as a separate business-entity: individual or organization who owns or produce devices and assets; Tenant may have multiple tenant administrator users and millions of customers;
 // Customers - customer is also a separate business-entity: individual or organization who purchase or uses tenant devices and/or assets; Customer may have multiple users and millions of devices and/or assets;
@@ -80,7 +80,7 @@ func Connect(host string, user string, pass string) (*Thingsboard, error) {
 		return nil
 	})
 
-	err := tb.AuthLogin()
+	err := tb.Auth.login()
 	if err != nil {
 		return nil, err
 	}
