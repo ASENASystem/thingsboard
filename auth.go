@@ -6,7 +6,7 @@ import "fmt"
 // https://demo.thingsboard.io/swagger-ui.html#/auth-controller
 // https://thingsboard.io/docs/reference/rest-api/
 // REST API Auth
-// ThingsBoard uses JWT for request auth. You will need to populate “X-Authorization”
+// Thingsboard uses JWT for request auth. You will need to populate “X-Authorization”
 // header using “Authorize” button in the top-right corner of the Swagger UI.
 //
 // Request:
@@ -16,6 +16,14 @@ import "fmt"
 // Response:
 // { "token":		 "$YOUR_JWT_TOKEN",
 //   "refreshToken": "$YOUR_JWT_REFRESH_TOKEN" }
+
+// {
+// 	"status": 401,
+// 	"message": "Token has expired",
+// 	"errorCode": 11,
+// 	"timestamp": "2020-11-05T09:55:30.235+0000"
+// }
+
 type Auth struct {
 	Token        string
 	RefreshToken string
@@ -38,6 +46,30 @@ func (tb *Thingsboard) AuthLogin() error {
 
 	return err
 }
+
+// AuthUser Response model:
+// User {
+// 	additionalInfo (string, optional),
+// 	authority (string, optional) = ['SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER', 'REFRESH_TOKEN']stringEnum:"SYS_ADMIN", "TENANT_ADMIN", "CUSTOMER_USER", "REFRESH_TOKEN",
+// 	createdTime (integer, optional),
+// 	customerId (CustomerId, optional),
+// 	email (string, optional),
+// 	firstName (string, optional),
+// 	id (UserId, optional),
+// 	lastName (string, optional),
+// 	name (string, optional),
+// 	tenantId (TenantId, optional)
+// 	}
+// CustomerId {
+// 	id (string, optional)
+// 	}
+// UserId {
+// 	id (string, optional)
+// 	}
+// TenantId {
+// 	id (string, optional)
+// 	}
+func (tb *Thingsboard) AuthUser() {}
 
 // AuthLogout [POST] /api/auth/logout
 // https://demo.thingsboard.io/swagger-ui.html#!/auth-controller/logoutUsingPOST

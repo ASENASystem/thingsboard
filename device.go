@@ -6,9 +6,7 @@ package thingsboard
 // DeviceFindByQuery [POST] /api/devices
 // https://thingsboard.io/docs/reference/rest-api/
 func (tb *Thingsboard) DeviceFindByQuery(query string) error {
-
 	return nil
-
 }
 
 // DeviceGetDeviceTypes GET /api/device/types
