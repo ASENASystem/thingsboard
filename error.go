@@ -1,6 +1,6 @@
 package thingsboard
 
-type Error struct {
+type tberror struct {
 	// Status: "status": 401,
 	Status int8
 	// Message: "message": "Token has expired",

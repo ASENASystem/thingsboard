@@ -27,13 +27,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	tb, err := thingsboard.Connect(host, user, pass)
+	tb, err := thingsboard.New(host, user, pass)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	fmt.Println("Bearer " + tb.Auth.Token)
 
-	tb.AuthLogout()
+	err = tb.Disconnect()
+	if err != nil {
+		fmt.Println(err)
+	}
 
 }

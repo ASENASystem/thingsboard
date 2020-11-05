@@ -24,6 +24,7 @@ import "fmt"
 // 	"timestamp": "2020-11-05T09:55:30.235+0000"
 // }
 
+// Auth controller structure
 type Auth struct {
 	Token        string
 	RefreshToken string
@@ -31,7 +32,7 @@ type Auth struct {
 
 // AuthLogin [POST] /api/auth/login
 // https://thingsboard.io/docs/reference/rest-api/
-func (tb *Thingsboard) AuthLogin() error {
+func (tb *Thingsboard) authLogin() error {
 
 	a := Auth{}
 
@@ -42,43 +43,68 @@ func (tb *Thingsboard) AuthLogin() error {
 		Post(tb.apiHost + "/auth/login")
 
 	tb.resty.SetAuthToken(a.Token)
+
+	// Get User details
+	err = tb.authUser()
+	if err != nil {
+		return err
+	}
+
 	tb.Auth = &a
 
 	return err
 }
 
-// AuthUser Response model:
-// User {
-// 	additionalInfo (string, optional),
-// 	authority (string, optional) = ['SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER', 'REFRESH_TOKEN']stringEnum:"SYS_ADMIN", "TENANT_ADMIN", "CUSTOMER_USER", "REFRESH_TOKEN",
-// 	createdTime (integer, optional),
-// 	customerId (CustomerId, optional),
-// 	email (string, optional),
-// 	firstName (string, optional),
-// 	id (UserId, optional),
-// 	lastName (string, optional),
-// 	name (string, optional),
-// 	tenantId (TenantId, optional)
-// 	}
-// CustomerId {
-// 	id (string, optional)
-// 	}
-// UserId {
-// 	id (string, optional)
-// 	}
-// TenantId {
-// 	id (string, optional)
-// 	}
-func (tb *Thingsboard) AuthUser() {}
+// auth-controller : Auth ControllerShow/HideList OperationsExpand Operations
+// POST /api/auth/changePassword
+// changePassword
+
+// POST /api/auth/logout
+// logout
+
+// GET /api/auth/user
+// getUser
+func (tb *Thingsboard) authUser() error {
+
+	u := jsonUser{}
+	r, err := tb.resty.R().
+		SetHeader("Content-Type", "application/json").
+		SetResult(&u).
+		Get(tb.apiHost + "/auth/user")
+	fmt.Println(r)
+	fmt.Println(u)
+	return err
+}
+
+// GET /api/noauth/activate{?activateToken}
+// checkActivateToken
+
+// POST /api/noauth/activate{?sendActivationMail}
+// activateUser
+
+// POST /api/noauth/oauth2Clients
+// getOAuth2Clients
+
+// POST /api/noauth/resetPassword
+// resetPassword
+
+// POST /api/noauth/resetPasswordByEmail
+// requestResetPasswordByEmail
+
+// GET /api/noauth/resetPassword{?resetToken}
+// checkResetToken
+
+// GET /api/noauth/userPasswordPolicy
+// getUserPasswordPolicy
 
 // AuthLogout [POST] /api/auth/logout
 // https://demo.thingsboard.io/swagger-ui.html#!/auth-controller/logoutUsingPOST
 // How it works? Does it work at all? :D
-func (tb *Thingsboard) AuthLogout() error {
+func (tb *Thingsboard) authLogout() error {
 
-	r, err := tb.resty.R().
+	_, err := tb.resty.R().
 		Post(tb.apiHost + "/auth/logout")
-	fmt.Println(r)
+
 	return err
 
 }

@@ -30,26 +30,6 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
-// EntityType holds types of all Thingsboard entities ;]
-type EntityType int8
-
-const (
-	TENANT EntityType = iota
-	CUSTOMER
-	USER
-	DASHBOARD
-	ASSET
-	DEVICE
-	ALARM
-	RULE_CHAIN
-	RULE_NODE
-	ENTITY_VIEW
-	WIDGETS_BUNDLE
-	WIDGET_TYPE
-	TENANT_PROFILE
-	DEVICE_PROFILE
-)
-
 // Thingsboard ...
 type Thingsboard struct {
 	user    string
@@ -57,11 +37,12 @@ type Thingsboard struct {
 	host    string
 	apiHost string
 	Auth    *Auth
+	User    *User
 	resty   *resty.Client
 }
 
-// Connect returns new Thingsboard instance
-func Connect(host string, user string, pass string) (*Thingsboard, error) {
+// New returns new Thingsboard instance
+func New(host string, user string, pass string) (*Thingsboard, error) {
 
 	tb := Thingsboard{
 		user:    user,
@@ -70,6 +51,13 @@ func Connect(host string, user string, pass string) (*Thingsboard, error) {
 		apiHost: host + "/api",
 	}
 
+	err := tb.Connect()
+
+	return &tb, err
+}
+
+// Connect is used by New() method to connect to Thingsboard server.
+func (tb *Thingsboard) Connect() error {
 	// RESTy v2: Client - https://github.com/go-resty/resty/v2
 	tb.resty = resty.New()
 
@@ -80,9 +68,16 @@ func Connect(host string, user string, pass string) (*Thingsboard, error) {
 		return nil
 	})
 
-	err := tb.AuthLogin()
+	err := tb.authLogin()
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &tb, err
+
+	return nil
+}
+
+// Disconnect should logout, remove currently authenticated user (authorization for token should be removed).
+// But it dosn't work at all on Thingsboard.
+func (tb *Thingsboard) Disconnect() error {
+	return tb.authLogout()
 }
