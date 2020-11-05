@@ -1,7 +1,5 @@
 package thingsboard
 
-import "fmt"
-
 // Auth Controller -> auth-controller
 // https://demo.thingsboard.io/swagger-ui.html#/auth-controller
 // https://thingsboard.io/docs/reference/rest-api/
@@ -66,13 +64,11 @@ func (tb *Thingsboard) authLogin() error {
 // getUser
 func (tb *Thingsboard) authUser() error {
 
-	u := jsonUser{}
-	r, err := tb.resty.R().
+	u := User{}
+	_, err := tb.resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetResult(&u).
 		Get(tb.apiHost + "/auth/user")
-	fmt.Println(r)
-	fmt.Println(u)
 	return err
 }
 
