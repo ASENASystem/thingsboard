@@ -30,7 +30,7 @@ type Auth struct {
 
 // AuthLogin [POST] /api/auth/login
 // https://thingsboard.io/docs/reference/rest-api/
-func (tb *Thingsboard) authLogin() error {
+func (tb *Thingsboard) login() error {
 
 	a := Auth{}
 
@@ -43,7 +43,7 @@ func (tb *Thingsboard) authLogin() error {
 	tb.resty.SetAuthToken(a.Token)
 
 	// Get User details
-	err = tb.authUser()
+	err = tb.getUser()
 	if err != nil {
 		return err
 	}
@@ -62,13 +62,15 @@ func (tb *Thingsboard) authLogin() error {
 
 // GET /api/auth/user
 // getUser
-func (tb *Thingsboard) authUser() error {
+func (tb *Thingsboard) getUser() error {
 
 	u := User{}
 	_, err := tb.resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetResult(&u).
 		Get(tb.apiHost + "/auth/user")
+
+	tb.User = &u
 	return err
 }
 
@@ -96,7 +98,7 @@ func (tb *Thingsboard) authUser() error {
 // AuthLogout [POST] /api/auth/logout
 // https://demo.thingsboard.io/swagger-ui.html#!/auth-controller/logoutUsingPOST
 // How it works? Does it work at all? :D
-func (tb *Thingsboard) authLogout() error {
+func (tb *Thingsboard) logout() error {
 
 	_, err := tb.resty.R().
 		Post(tb.apiHost + "/auth/logout")

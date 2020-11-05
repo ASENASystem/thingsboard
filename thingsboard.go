@@ -68,7 +68,7 @@ func (tb *Thingsboard) Connect() error {
 		return nil
 	})
 
-	err := tb.authLogin()
+	err := tb.login()
 	if err != nil {
 		return err
 	}
@@ -79,5 +79,5 @@ func (tb *Thingsboard) Connect() error {
 // Disconnect should logout, remove currently authenticated user (authorization for token should be removed).
 // But it dosn't work at all on Thingsboard.
 func (tb *Thingsboard) Disconnect() error {
-	return tb.authLogout()
+	return tb.logout()
 }

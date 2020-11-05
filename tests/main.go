@@ -32,6 +32,12 @@ func main() {
 		fmt.Println(err)
 	}
 
+	fmt.Printf("%+v\n", tb.User)
+
+	for key, element := range tb.User.AdditionalInfo.UserPasswordHistory {
+		fmt.Println("Key:", key, "=>", "Element:", element)
+	}
+
 	fmt.Println("Bearer " + tb.Auth.Token)
 
 	err = tb.Disconnect()
