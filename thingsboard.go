@@ -80,7 +80,7 @@ func Connect(host string, user string, pass string) (*Thingsboard, error) {
 		return nil
 	})
 
-	err := tb.Auth.login()
+	err := tb.AuthLogin()
 	if err != nil {
 		return nil, err
 	}
