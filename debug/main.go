@@ -40,7 +40,7 @@ func main() {
 
 	fmt.Println("Bearer " + tb.Auth.Token)
 
-	tb.getTenantDevices
+	tb.GetTenantDevices(10, 0)
 
 	err = tb.Disconnect()
 	if err != nil {
