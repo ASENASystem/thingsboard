@@ -1,5 +1,6 @@
 package thingsboard
 
+// ############################################################################
 // Auth Controller -> auth-controller
 // https://demo.thingsboard.io/swagger-ui.html#/auth-controller
 // https://thingsboard.io/docs/reference/rest-api/
@@ -14,25 +15,19 @@ package thingsboard
 // Response:
 // { "token":		 "$YOUR_JWT_TOKEN",
 //   "refreshToken": "$YOUR_JWT_REFRESH_TOKEN" }
-
-// {
-// 	"status": 401,
-// 	"message": "Token has expired",
-// 	"errorCode": 11,
-// 	"timestamp": "2020-11-05T09:55:30.235+0000"
-// }
+// ############################################################################
 
 // Auth controller structure
-type Auth struct {
-	Token        string
-	RefreshToken string
+type jsonAuth struct {
+	Token        string `json:"token"`
+	RefreshToken string `json:"refreshToken"`
 }
 
 // AuthLogin [POST] /api/auth/login
 // https://thingsboard.io/docs/reference/rest-api/
 func (tb *Thingsboard) login() error {
 
-	a := Auth{}
+	a := jsonAuth{}
 
 	_, err := tb.resty.R().
 		SetHeader("Content-Type", "application/json").
@@ -64,7 +59,7 @@ func (tb *Thingsboard) login() error {
 // getUser
 func (tb *Thingsboard) getUser() error {
 
-	u := User{}
+	u := jsonUser{}
 	_, err := tb.resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetResult(&u).

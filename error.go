@@ -1,12 +1,13 @@
 package thingsboard
 
-type tberror struct {
-	// Status: "status": 401,
-	Status int8
-	// Message: "message": "Token has expired",
-	Message string
-	// ErrorCode: "errorCode": 11,
-	ErrorCode int8
-	// Timestamp: "timestamp": "2020-11-05T09:55:30.235+0000"
-	Timestamp string
+// ############################################################################
+//  Thingsboard Error controller
+// ############################################################################
+
+type jsonError struct {
+	Timestamp string `json:"timestamp"`
+	Status    int    `json:"status"`
+	Error     string `json:"error"`
+	Message   string `json:"message"`
+	Path      string `json:"path"`
 }
