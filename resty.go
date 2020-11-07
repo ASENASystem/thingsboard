@@ -1,10 +1,11 @@
 package thingsboard
 
 // ############################################################################
-//  Thingsboard Error controller
+//  Thingsboard RESTy controller
 // ############################################################################
 
-type jsonError struct {
+// TBError holds Thingboard error response
+type TBError struct {
 	Timestamp string `json:"timestamp"`
 	Status    int    `json:"status"`
 	Error     string `json:"error"`

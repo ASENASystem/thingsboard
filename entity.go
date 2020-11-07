@@ -6,7 +6,7 @@ type entityID struct {
 }
 
 // EntityType holds types of all Thingsboard entities ;]
-type EntityType string
+type EntityTypes string
 
 // const (
 // 	TENANT EntityType = iota

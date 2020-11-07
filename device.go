@@ -1,13 +1,18 @@
 package thingsboard
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"strconv"
+)
 
 // ############################################################################
 // Device Controller -> device-controller
 // https://demo.thingsboard.io/swagger-ui.html#/device-controller
 // ############################################################################
 
-type jsonDevice struct {
+// Device structure to hold information about devices
+type Device struct {
 	ID             entityID `json:"id"`
 	TenantID       entityID `json:"tenantId"`
 	CustomerID     entityID `json:"customerId"`
@@ -19,6 +24,14 @@ type jsonDevice struct {
 	Name  string `json:"name"`
 	Type  string `json:"type"`
 	Label string `json:"label"`
+}
+
+// GetTenantDevices represents structure for GetTenantDevices() method
+type GetTenantDevices struct {
+	Data          []Device `json:"data"`
+	TotalPages    int      `json:"totalPages"`
+	TotalElements int      `json:"totalElements"`
+	HasNext       bool     `json:"hasNext"`
 }
 
 // DELETE /api/customer/device/{deviceId}
@@ -55,8 +68,25 @@ func (tb *Thingsboard) saveDeviceCredentials() {}
 // DELETE /api/device/{deviceId}
 // deleteDevice
 
-// GET /api/device/{deviceId}
-// getDeviceById
+// GetDeviceByID GET /api/device/{deviceId}
+// TODO: HTTP Request codes
+func (tb *Thingsboard) GetDeviceByID(deviceID string) (Device, error) {
+
+	d := Device{}
+
+	r, err := tb.resty.R().
+		SetResult(&d).
+		Get(tb.apiHost + "/device/" + deviceID)
+
+	if r.StatusCode() != 200 {
+		fmt.Printf("\nResponse: %+v\n", r)
+		fmt.Printf("\nError: %+v\n", err)
+		return d, errors.New("")
+
+	}
+
+	return d, nil
+}
 
 // GET /api/device/{deviceId}/credentials
 // getDeviceCredentialsByDeviceId
@@ -64,8 +94,20 @@ func (tb *Thingsboard) saveDeviceCredentials() {}
 // POST /api/devices
 // findByQuery
 
-// GET /api/devices{?deviceIds}
-// getDevicesByIds
+// GetDevicesByIds GET /api/devices{?deviceIds}
+func (tb *Thingsboard) GetDevicesByIds(deviceIDs string) ([]Device, error) {
+
+	d := []Device{}
+
+	_, err := tb.resty.R().
+		SetQueryParams(map[string]string{
+			"deviceIds": string(deviceIDs),
+		}).
+		SetResult(&d).
+		Get(tb.apiHost + "/devices")
+
+	return d, err
+}
 
 // POST /api/device{?accessToken}
 // saveDevice
@@ -73,26 +115,46 @@ func (tb *Thingsboard) saveDeviceCredentials() {}
 // GET /api/tenant/deviceInfos{?type,textSearch,sortProperty,sortOrder,pageSize,page}
 // getTenantDeviceInfos
 
+// GetTenantDevice (by Name!)
 // GET /api/tenant/devices{?deviceName}
-// getTenantDevice (by Name!)
-func (tb *Thingsboard) getTenantDevice() {}
+func (tb *Thingsboard) GetTenantDevice(name string) (Device, error) {
 
-// GetTenantDevices
+	d := Device{}
+
+	_, err := tb.resty.R().
+		SetQueryParams(map[string]string{
+			"deviceName": string(name),
+		}).
+		SetResult(&d).
+		Get(tb.apiHost + "/tenant/devices")
+
+	return d, err
+}
+
+// GetTenantDevices downloads information about currently logged user devices available in his Tenant
 // GET /api/tenant/devices{?type,textSearch,sortProperty,sortOrder,*pageSize,*page}
 // 401 Unauthorized
 // 403 Forbidden
 // 404 Not Found
-type getTenantDevices struct {
-	Data          []jsonDevice `json:"data"`
-	TotalPages    int          `json:"totalPages"`
-	TotalElements int          `json:"totalElements"`
-	HasNext       bool         `json:"hasNext"`
-}
+func (tb *Thingsboard) GetTenantDevices(pageSize int, page int) (GetTenantDevices, error) {
 
-// GetTenantDevices downloads information about currently logged user devices available in his Tenant
-func (tb *Thingsboard) GetTenantDevices(pageSize int, page int) {
-	fmt.Println(pageSize)
-	fmt.Println(page)
+	d := GetTenantDevices{}
+
+	_, err := tb.resty.R().
+		SetQueryParams(map[string]string{
+			"pageSize": strconv.Itoa(pageSize),
+			"page":     strconv.Itoa(page),
+		}).
+		SetResult(&d).
+		Get(tb.apiHost + "/tenant/devices")
+
+	// TODO: Check requqest response codes
+
+	if err != nil {
+		return d, err
+	}
+
+	return d, nil
 }
 
 // POST /api/tenant/{tenantId}/device/{deviceId}

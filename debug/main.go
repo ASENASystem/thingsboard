@@ -32,15 +32,22 @@ func main() {
 		fmt.Println(err)
 	}
 
-	fmt.Printf("%+v\n", tb.User)
+	// fmt.Printf("%+v\n", tb.User)
+	// for key, element := range tb.User.AdditionalInfo.UserPasswordHistory {
+	// 	fmt.Println("Key:", key, "=>", "Element:", element)
+	// }
 
-	for key, element := range tb.User.AdditionalInfo.UserPasswordHistory {
-		fmt.Println("Key:", key, "=>", "Element:", element)
+	fmt.Printf("\n\nBearer " + tb.Auth.Token + "\n\n")
+
+	fmt.Print("Looking for device ID named: 'test': ")
+	device1, _ := tb.GetTenantDevice("test")
+	fmt.Printf("%+v", device1.ID.ID)
+
+	d2, err := tb.GetDeviceByID(device1.ID.ID)
+	if err != nil {
+		fmt.Println(err)
 	}
-
-	fmt.Println("Bearer " + tb.Auth.Token)
-
-	tb.GetTenantDevices(10, 0)
+	fmt.Printf("\n\n%+v\n\n", d2)
 
 	err = tb.Disconnect()
 	if err != nil {
