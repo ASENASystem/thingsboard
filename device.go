@@ -1,8 +1,6 @@
 package thingsboard
 
 import (
-	"errors"
-	"fmt"
 	"strconv"
 )
 
@@ -70,22 +68,16 @@ func (tb *Thingsboard) saveDeviceCredentials() {}
 
 // GetDeviceByID GET /api/device/{deviceId}
 // TODO: HTTP Request codes
-func (tb *Thingsboard) GetDeviceByID(deviceID string) (Device, error) {
+func (tb *Thingsboard) GetDeviceByID(deviceID string) (*Device, error) {
 
 	d := Device{}
 
-	r, err := tb.resty.R().
+	_, err := tb.resty.R().
 		SetResult(&d).
-		Get(tb.apiHost + "/device/" + deviceID)
+		Get(tb.apiHost + "/device/x" + deviceID)
 
-	if r.StatusCode() != 200 {
-		fmt.Printf("\nResponse: %+v\n", r)
-		fmt.Printf("\nError: %+v\n", err)
-		return d, errors.New("")
+	return &d, err
 
-	}
-
-	return d, nil
 }
 
 // GET /api/device/{deviceId}/credentials

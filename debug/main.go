@@ -41,16 +41,15 @@ func main() {
 
 	fmt.Print("Looking for device ID named: 'test': ")
 	device1, _ := tb.GetTenantDevice("test")
-	fmt.Printf("%+v", device1.ID.ID)
+	fmt.Printf("%+v\n", device1.ID.ID)
 
-	d2, err := tb.GetDeviceByID(device1.ID.ID)
-	if err != nil {
+	if d2, err := tb.GetDeviceByID(device1.ID.ID); err != nil {
 		fmt.Println(err)
+	} else {
+		fmt.Printf("\n\n%+v\n\n", d2)
 	}
-	fmt.Printf("\n\n%+v\n\n", d2)
 
-	err = tb.Disconnect()
-	if err != nil {
+	if err := tb.Disconnect(); err != nil {
 		fmt.Println(err)
 	}
 
