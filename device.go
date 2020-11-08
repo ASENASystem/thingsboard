@@ -74,7 +74,7 @@ func (tb *Thingsboard) GetDeviceByID(deviceID string) (*Device, error) {
 
 	_, err := tb.resty.R().
 		SetResult(&d).
-		Get(tb.apiHost + "/device/x" + deviceID)
+		Get(tb.apiHost + "/device/" + deviceID)
 
 	return &d, err
 
