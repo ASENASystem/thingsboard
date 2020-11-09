@@ -101,17 +101,24 @@ func (tb *Thingsboard) Connect() error {
 	// https://github.com/go-resty/resty/blob/master/client.go#L382
 	tb.resty.OnAfterResponse(func(_ *resty.Client, r *resty.Response) error {
 		if r.IsError() {
+			if r.StatusCode() == 401 {
+				return tb.login() // 401 - Token has expired
+				// {
+				// 	"status": 401,
+				// 	"message": "Token has expired",
+				// 	"errorCode": 11,
+				// 	"timestamp": "2020-11-09T20:36:22.306+0000"
+				//   }
+
+			}
 			return r.Error().(*TBError)
+
 		}
 		return nil
 	})
 
-	err := tb.login()
-	if err != nil {
-		return err
-	}
+	return tb.login()
 
-	return nil
 }
 
 // Disconnect should logout, remove currently authenticated user (authorization for token should be removed).

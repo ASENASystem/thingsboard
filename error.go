@@ -64,3 +64,10 @@ func (e *TBError) Error() string {
 // "message": "JSON parse error: Unrecognized token 'fff': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false'); nested exception is com.fasterxml.jackson.core.JsonParseException: Unrecognized token 'fff': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')\n at [Source: (PushbackInputStream); line: 1, column: 4]",
 // "path": "/api/devices"
 //   }
+
+// {
+// 	"status": 401,
+// 	"message": "Token has expired",
+// 	"errorCode": 11,
+// 	"timestamp": "2020-11-09T20:36:22.306+0000"
+//   }
