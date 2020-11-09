@@ -87,13 +87,18 @@ func (tb *Thingsboard) Connect() error {
 	tb.resty = resty.New()
 	tb.resty.SetError(TBError{})
 
-	// RESTy v2: Append middleware function to set proper X-Authorization header.
+	// Before REST request is sent
+	// RESTy v2: Append middleware function for setting proper X-Authorization
+	//  header before request is sent.
 	// https://github.com/go-resty/resty/blob/master/client.go#L359
 	tb.resty.OnBeforeRequest(func(c *resty.Client, _ *resty.Request) error {
 		c.Header.Set("X-Authorization", "Bearer "+c.Token)
 		return nil
 	})
 
+	// After REST response is received
+	//  Checking for REST error response.
+	// https://github.com/go-resty/resty/blob/master/client.go#L382
 	tb.resty.OnAfterResponse(func(_ *resty.Client, r *resty.Response) error {
 		if r.IsError() {
 			return r.Error().(*TBError)
