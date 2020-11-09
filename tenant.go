@@ -1,9 +1,8 @@
 package thingsboard
 
-// Tenat struct for Thingsboard Tenant controller
+// Tenant struct for Thingsboard Tenant controller
 // http://demo.thingsboard.io/swagger-ui.html#/tenant-controller
 type Tenant struct{}
-type tenantID entityID
 
 // tenant-controller : Tenant ControllerShow/HideList OperationsExpand Operations
 // POST /api/tenant
