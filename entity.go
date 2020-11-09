@@ -5,9 +5,7 @@ type entityID struct {
 	ID         string `json:"id"`
 }
 
-// EntityTypes holds types of all Thingsboard entities ;]
-type EntityTypes string
-
+// TODO: Correct ENUM type for EntityType
 // const (
 // 	TENANT EntityType = iota
 // 	CUSTOMER
