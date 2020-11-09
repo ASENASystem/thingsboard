@@ -5,7 +5,7 @@ type entityID struct {
 	ID         string `json:"id"`
 }
 
-// EntityType holds types of all Thingsboard entities ;]
+// EntityTypes holds types of all Thingsboard entities ;]
 type EntityTypes string
 
 // const (
