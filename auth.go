@@ -30,7 +30,6 @@ func (tb *Thingsboard) login() error {
 	a := jsonAuth{}
 
 	_, err := tb.resty.R().
-		SetHeader("Content-Type", "application/json").
 		SetBody(`{"username":"` + tb.user + `", "password":"` + tb.pass + `"}`).
 		SetResult(&a). // or SetResult(&AuthSuccess{}).
 		Post(tb.apiHost + "/auth/login")
