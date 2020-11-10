@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Create Git `pre-commit` script running this file in order to generate UML diagram
+# of this project before each commit.
+
 export umlFile="DIAGRAM.md"
 
 echo "\`\`\`plantuml" > $umlFile
