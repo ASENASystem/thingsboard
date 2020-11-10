@@ -39,4 +39,7 @@ Users are able to login to ThingsBoard web interface, execute REST API calls, ac
 
 ## UML Diagram
 
+Before every commit Git `pre-commit` script is run in order to generate below UML diagram for this project.
+Please check https://github.com/jfeliu007/goplantuml project for tools needed.
+
 [UML Diagram](DIAGRAM.md)
