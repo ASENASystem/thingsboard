@@ -11,3 +11,5 @@ goplantuml -recursive . >> $umlFile
 
 echo "\`\`\`" >> $umlFile
 echo "UML diagram created"
+
+git add $umlFile
