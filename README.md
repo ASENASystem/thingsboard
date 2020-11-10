@@ -39,4 +39,4 @@ Users are able to login to ThingsBoard web interface, execute REST API calls, ac
 
 ## UML Diagram
 
-[UML Diagram](UML_DIAGRAM.md)
+[UML Diagram](DIAGRAM.md)
