@@ -1,6 +1,10 @@
 # Thingsboard
 
+https://gitlab.com/%{project_path}/badges/%{default_branch}/pipeline.svg
+
 Thingsboard Go Library
+
+https://gitlab.com/asenasystem-opensource/go/thingsboard
 
 ## Thingsboard Entity structure
 
