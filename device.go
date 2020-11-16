@@ -1,6 +1,7 @@
 package thingsboard
 
 import (
+	"errors"
 	"strconv"
 )
 
@@ -120,7 +121,33 @@ func (tb *Thingsboard) GetDevicesByIds(deviceIDs string) ([]Device, error) {
 // GET /api/tenant/deviceInfos{?type,textSearch,sortProperty,sortOrder,pageSize,page}
 // getTenantDeviceInfos
 
-// getTokenByDeviceName
+// GetDeviceAccessTokenByName returns Acccess Token for Device with specified name
+func (tb *Thingsboard) GetDeviceAccessTokenByName(deviceName string) (string, error) {
+	dc, err := tb.GetDeviceCredentialsByDeviceName(deviceName)
+	if err != nil {
+		return "", err
+	}
+
+	if dc.CredentialsType == "ACCESS_TOKEN" {
+		return dc.CredentialsValue, nil
+	}
+
+	return "", errors.New("GetDeviceAccessTokenByName: ACCESS_TOKEN was not provided in CredentialsType")
+}
+
+// GetDeviceAccessTokenByID returns Acccess Token for Device with specified name
+func (tb *Thingsboard) GetDeviceAccessTokenByID(deviceID string) (string, error) {
+	dc, err := tb.GetDeviceCredentialsByDeviceID(deviceID)
+	if err != nil {
+		return "", err
+	}
+
+	if dc.CredentialsType == "ACCESS_TOKEN" {
+		return dc.CredentialsValue, nil
+	}
+
+	return "", errors.New("GetDeviceAccessTokenByID: ACCESS_TOKEN was not provided in CredentialsType")
+}
 
 // GetDeviceCredentialsByDeviceName returns Access Token for Device (by name)
 func (tb *Thingsboard) GetDeviceCredentialsByDeviceName(name string) (*DeviceCredentials, error) {

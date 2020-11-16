@@ -61,6 +61,8 @@ namespace thingsboard {
         + GetDeviceByID(deviceID string) (*Device, error)
         + GetDeviceCredentialsByDeviceID(deviceID string) (*DeviceCredentials, error)
         + GetDevicesByIds(deviceIDs string) ([]Device, error)
+        + GetDeviceAccessTokenByName(deviceName string) (string, error)
+        + GetDeviceAccessTokenByID(deviceID string) (string, error)
         + GetDeviceCredentialsByDeviceName(name string) (*DeviceCredentials, error)
         + GetTenantDevice(name string) (*Device, error)
         + GetDeviceByName(name string) (*Device, error)
