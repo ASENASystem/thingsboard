@@ -32,7 +32,7 @@ func (tb *Thingsboard) login() error {
 	_, err := tb.resty.R().
 		SetBody(`{"username":"` + tb.user + `", "password":"` + tb.pass + `"}`).
 		SetResult(&a). // or SetResult(&AuthSuccess{}).
-		Post(tb.apiHost + "/auth/login")
+		Post(tb.api + "/auth/login")
 
 	tb.resty.SetAuthToken(a.Token)
 
@@ -62,7 +62,7 @@ func (tb *Thingsboard) getUser() error {
 	_, err := tb.resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetResult(&u).
-		Get(tb.apiHost + "/auth/user")
+		Get(tb.api + "/auth/user")
 
 	tb.User = &u
 	return err
@@ -95,7 +95,7 @@ func (tb *Thingsboard) getUser() error {
 func (tb *Thingsboard) logout() error {
 
 	_, err := tb.resty.R().
-		Post(tb.apiHost + "/auth/logout")
+		Post(tb.api + "/auth/logout")
 
 	return err
 

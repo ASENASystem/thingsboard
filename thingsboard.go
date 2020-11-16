@@ -57,23 +57,23 @@ import (
 
 // Thingsboard ...
 type Thingsboard struct {
-	user    string
-	pass    string
-	host    string
-	apiHost string
-	Auth    *jsonAuth
-	User    *jsonUser
-	resty   *resty.Client
+	user  string
+	pass  string
+	host  string
+	api   string
+	Auth  *jsonAuth
+	User  *jsonUser
+	resty *resty.Client
 }
 
 // New returns new Thingsboard instance
 func New(host string, user string, pass string) (*Thingsboard, error) {
 
 	tb := Thingsboard{
-		user:    user,
-		pass:    pass,
-		host:    host,
-		apiHost: host + "/api",
+		user: user,
+		pass: pass,
+		host: host,
+		api:  host + "/api",
 	}
 
 	err := tb.Connect()
@@ -103,13 +103,13 @@ func (tb *Thingsboard) Connect() error {
 		if r.IsError() {
 			// TODO: Analyze refreshToken method
 			if r.StatusCode() == 401 {
-				return tb.login() // 401 - Token has expired
 				// {
 				// 	"status": 401,
 				// 	"message": "Token has expired",
 				// 	"errorCode": 11,
 				// 	"timestamp": "2020-11-09T20:36:22.306+0000"
 				//   }
+				return tb.login() // 401 - Token has expired
 			}
 			return r.Error().(*TBError)
 

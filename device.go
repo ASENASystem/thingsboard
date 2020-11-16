@@ -24,6 +24,17 @@ type Device struct {
 	Label string `json:"label"`
 }
 
+// DeviceCredentials struct to hold getDeviceCredentialsByDeviceId() repsponse
+type DeviceCredentials struct {
+	CreatedTime   int    `json:"createdTime"`
+	CredentialsID string `json:"credentialsId"`
+	// ['ACCESS_TOKEN', 'X509_CERTIFICATE']stringEnum:"ACCESS_TOKEN", "X509_CERTIFICATE",
+	CredentialsType  string   `json:"credentialsType"`
+	CredentialsValue string   `json:"credentialsValue"`
+	DeviceID         entityID `json:"deviceId"`
+	ID               entityID `json:"id"` // DeviceCredentialsId
+}
+
 // GetTenantDevices represents structure for GetTenantDevices() method
 type GetTenantDevices struct {
 	Data          []Device `json:"data"`
@@ -74,14 +85,16 @@ func (tb *Thingsboard) GetDeviceByID(deviceID string) (*Device, error) {
 
 	_, err := tb.resty.R().
 		SetResult(&d).
-		Get(tb.apiHost + "/device/" + deviceID)
+		Get(tb.api + "/device/" + deviceID)
 
 	return &d, err
-
 }
 
+// GetDeviceCredentialsByDeviceID returns device credentials structure
 // GET /api/device/{deviceId}/credentials
-// getDeviceCredentialsByDeviceId
+func (tb *Thingsboard) GetDeviceCredentialsByDeviceID(deviceID string) (*DeviceCredentials, error) {
+	return &DeviceCredentials{}, nil
+}
 
 // POST /api/devices
 // findByQuery
@@ -96,7 +109,7 @@ func (tb *Thingsboard) GetDevicesByIds(deviceIDs string) ([]Device, error) {
 			"deviceIds": string(deviceIDs),
 		}).
 		SetResult(&d).
-		Get(tb.apiHost + "/devices")
+		Get(tb.api + "/devices")
 
 	return d, err
 }
@@ -107,9 +120,32 @@ func (tb *Thingsboard) GetDevicesByIds(deviceIDs string) ([]Device, error) {
 // GET /api/tenant/deviceInfos{?type,textSearch,sortProperty,sortOrder,pageSize,page}
 // getTenantDeviceInfos
 
-// GetTenantDevice (by Name!)
+// getTokenByDeviceName
+
+// GetDeviceCredentialsByDeviceName returns Access Token for Device (by name)
+func (tb *Thingsboard) GetDeviceCredentialsByDeviceName(name string) (*DeviceCredentials, error) {
+
+	d, err := tb.GetDeviceByName(name)
+	if err != nil {
+		return &DeviceCredentials{}, err
+	}
+
+	dc, err := tb.GetDeviceCredentialsByDeviceID(d.ID.ID)
+	if err != nil {
+		return &DeviceCredentials{}, err
+	}
+
+	return dc, nil
+}
+
+// GetTenantDevice is an alias of GetDeviceByName() - compatibility with TB Swagger
+func (tb *Thingsboard) GetTenantDevice(name string) (*Device, error) {
+	return tb.GetDeviceByName(name)
+}
+
+// GetDeviceByName (by Name!)
 // GET /api/tenant/devices{?deviceName}
-func (tb *Thingsboard) GetTenantDevice(name string) (Device, error) {
+func (tb *Thingsboard) GetDeviceByName(name string) (*Device, error) {
 
 	d := Device{}
 
@@ -118,9 +154,9 @@ func (tb *Thingsboard) GetTenantDevice(name string) (Device, error) {
 			"deviceName": string(name),
 		}).
 		SetResult(&d).
-		Get(tb.apiHost + "/tenant/devices")
+		Get(tb.api + "/tenant/devices")
 
-	return d, err
+	return &d, err
 }
 
 // GetTenantDevices downloads information about currently logged user devices available in his Tenant
@@ -138,7 +174,7 @@ func (tb *Thingsboard) GetTenantDevices(pageSize int, page int) (GetTenantDevice
 			"page":     strconv.Itoa(page),
 		}).
 		SetResult(&d).
-		Get(tb.apiHost + "/tenant/devices")
+		Get(tb.api + "/tenant/devices")
 
 	// TODO: Check requqest response codes
 
