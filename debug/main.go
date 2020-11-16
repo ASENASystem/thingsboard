@@ -40,7 +40,7 @@ func main() {
 	fmt.Printf("\n\nBearer " + tb.Auth.Token + "\n\n")
 
 	fmt.Print("Looking for device ID named: 'test': ")
-	device1, _ := tb.GetTenantDevice("test")
+	device1, _ := tb.GetDeviceByName("test")
 	fmt.Printf("%+v\n", device1.ID.ID)
 
 	if d2, err := tb.GetDeviceByID(device1.ID.ID); err != nil {

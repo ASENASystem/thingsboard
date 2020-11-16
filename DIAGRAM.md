@@ -14,6 +14,15 @@ namespace thingsboard {
         + Label string
 
     }
+    class DeviceCredentials << (S,Aquamarine) >> {
+        + CreatedTime int
+        + CredentialsID string
+        + CredentialsType string
+        + CredentialsValue string
+        + DeviceID entityID
+        + ID entityID
+
+    }
     class GetTenantDevices << (S,Aquamarine) >> {
         + Data []Device
         + TotalPages int
@@ -32,11 +41,13 @@ namespace thingsboard {
         + Error() string
 
     }
+    class Telemetry << (S,Aquamarine) >> {
+    }
     class Thingsboard << (S,Aquamarine) >> {
         - user string
         - pass string
         - host string
-        - apiHost string
+        - api string
         - resty *resty.Client
 
         + Auth *jsonAuth
@@ -48,9 +59,13 @@ namespace thingsboard {
         - saveDeviceCredentials() 
 
         + GetDeviceByID(deviceID string) (*Device, error)
+        + GetDeviceCredentialsByDeviceID(deviceID string) (*DeviceCredentials, error)
         + GetDevicesByIds(deviceIDs string) ([]Device, error)
-        + GetTenantDevice(name string) (Device, error)
+        + GetDeviceCredentialsByDeviceName(name string) (*DeviceCredentials, error)
+        + GetTenantDevice(name string) (*Device, error)
+        + GetDeviceByName(name string) (*Device, error)
         + GetTenantDevices(pageSize int, page int) (GetTenantDevices, error)
+        + SaveTelemetry(deviceToken string, t Telemetry) error
         + Connect() error
         + Disconnect() error
 
