@@ -1,5 +1,14 @@
 ```plantuml
 @startuml
+namespace main {
+    class cubeCell << (S,Aquamarine) >> {
+        + Battery string
+        + Distance string
+
+    }
+}
+
+
 namespace thingsboard {
     class Customer << (S,Aquamarine) >> {
     }
@@ -41,8 +50,6 @@ namespace thingsboard {
         + Error() string
 
     }
-    class TelemetryData << (S,Aquamarine) >> {
-    }
     class Thingsboard << (S,Aquamarine) >> {
         - user string
         - pass string
@@ -67,7 +74,7 @@ namespace thingsboard {
         + GetTenantDevice(name string) (*Device, error)
         + GetDeviceByName(name string) (*Device, error)
         + GetTenantDevices(pageSize int, page int) (GetTenantDevices, error)
-        + SaveTelemetry(deviceToken string, td TelemetryData) error
+        + SaveTelemetry(deviceToken string, t <font color=blue>interface</font>{}) error
         + Connect() error
         + Disconnect() error
 

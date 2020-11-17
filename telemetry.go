@@ -44,15 +44,13 @@ package thingsboard
 // {"ts":1451649600512, "values":{"key1":"value1", "key2":"value2"}}
 // In the example above, we assume that “1451649600512” is a unix timestamp with milliseconds precision. For example, the value ‘1451649600512’ corresponds to ‘Fri, 01 Jan 2016 12:00:00.512 GMT’
 
-// TelemetryData holds telemetry data that's going to be uploaded to ThingsBoard
-type TelemetryData struct{}
-
 // SaveTelemetry uploads Telemetry to ThingsBoard, by deviceID
-func (tb *Thingsboard) SaveTelemetry(deviceToken string, td TelemetryData) error {
+func (tb *Thingsboard) SaveTelemetry(deviceToken string, t interface{}) error {
 
 	_, err := tb.resty.R().
-		SetBody(&td).
-		Post(tb.api + "/" + deviceToken + "/telemetry")
+		SetHeader("Content-Type", "application/json").
+		SetBody(t).
+		Post(tb.api + "/v1/" + deviceToken + "/telemetry")
 
 	return err
 }

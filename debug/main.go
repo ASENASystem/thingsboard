@@ -8,6 +8,11 @@ import (
 	"gitlab.com/asenasystem-opensource/go/thingsboard"
 )
 
+type cubeCell struct {
+	Battery  string `json:"battery"`
+	Distance string `json:"distance"`
+}
+
 func main() {
 
 	host := os.Getenv("TB_HOST")
@@ -32,17 +37,17 @@ func main() {
 		fmt.Println(err)
 	}
 
-	fmt.Printf("\n\nBearer " + tb.Auth.Token + "\n\n")
+	// fmt.Printf("\n\nBearer " + tb.Auth.Token + "\n\n")
 
-	fmt.Print("Looking for device ID named: 'test': ")
+	fmt.Print("Device: 'test' ID: ")
 	device1, _ := tb.GetDeviceByName("test")
 	fmt.Printf("%+v\n", device1.ID.ID)
 
-	if d, err := tb.GetDeviceByID(device1.ID.ID); err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Printf("\n\n%+v\n\n", d)
-	}
+	// if d, err := tb.GetDeviceByID(device1.ID.ID); err != nil {
+	// 	fmt.Println(err)
+	// } else {
+	// 	fmt.Printf("\n\n%+v\n\n", d)
+	// }
 
 	// fmt.Printf("%+v\n", tb.User)
 	// key -> accessToken
@@ -50,12 +55,24 @@ func main() {
 	devices["test"] = ""
 	devices["test2"] = ""
 
+	cc := cubeCell{
+		Battery:  "4.321",
+		Distance: "167",
+	}
+
 	for deviceName := range devices {
 		token, err := tb.GetDeviceAccessTokenByName(deviceName)
 		if err != nil {
 			fmt.Println(err)
 		}
 		devices[deviceName] = token
+
+		fmt.Println(cc)
+		err = tb.SaveTelemetry(devices["test"], cc)
+		if err != nil {
+			fmt.Println(err)
+		}
+
 	}
 
 	if err := tb.Disconnect(); err != nil {

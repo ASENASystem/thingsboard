@@ -52,6 +52,8 @@
 package thingsboard
 
 import (
+	"errors"
+
 	"github.com/go-resty/resty/v2"
 )
 
@@ -102,16 +104,21 @@ func (tb *Thingsboard) Connect() error {
 	tb.resty.OnAfterResponse(func(_ *resty.Client, r *resty.Response) error {
 		if r.IsError() {
 			// TODO: Analyze refreshToken method
-			if r.StatusCode() == 401 {
-				// {
-				// 	"status": 401,
-				// 	"message": "Token has expired",
-				// 	"errorCode": 11,
-				// 	"timestamp": "2020-11-09T20:36:22.306+0000"
-				//   }
-				return tb.login() // 401 - Token has expired
+			switch r.StatusCode() {
+			// 400 Bad Request - Invalid URL, request parameters or body.
+			case 400:
+				return r.Error().(*TBError)
+			// 401 Unauthorized - Invalid $ACCESS_TOKEN.
+			case 401:
+				return tb.login()
+			// 404 Not Found - Resource not found.
+			case 404:
+				return r.Error().(*TBError)
+			case 500:
+				return errors.New("ThingsBoard Error: HTTP 500")
+			default:
+				return r.Error().(*TBError)
 			}
-			return r.Error().(*TBError)
 
 		}
 		return nil
