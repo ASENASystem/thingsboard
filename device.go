@@ -94,7 +94,21 @@ func (tb *Thingsboard) GetDeviceByID(deviceID string) (*Device, error) {
 // GetDeviceCredentialsByDeviceID returns device credentials structure
 // GET /api/device/{deviceId}/credentials
 func (tb *Thingsboard) GetDeviceCredentialsByDeviceID(deviceID string) (*DeviceCredentials, error) {
-	return &DeviceCredentials{}, nil
+
+	dc := DeviceCredentials{}
+
+	if deviceID == "" {
+		return &dc, errors.New("GetDeviceCredentialsByDeviceID: deviceID was not provided")
+	}
+
+	_, err := tb.resty.R().
+		SetQueryParams(map[string]string{
+			"deviceId": string(deviceID),
+		}).
+		SetResult(&dc).
+		Get(tb.api + "/device/" + deviceID + "/credentials")
+
+	return &dc, err
 }
 
 // POST /api/devices
@@ -129,7 +143,7 @@ func (tb *Thingsboard) GetDeviceAccessTokenByName(deviceName string) (string, er
 	}
 
 	if dc.CredentialsType == "ACCESS_TOKEN" {
-		return dc.CredentialsValue, nil
+		return dc.CredentialsID, nil
 	}
 
 	return "", errors.New("GetDeviceAccessTokenByName: ACCESS_TOKEN was not provided in CredentialsType")

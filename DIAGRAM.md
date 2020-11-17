@@ -41,7 +41,7 @@ namespace thingsboard {
         + Error() string
 
     }
-    class Telemetry << (S,Aquamarine) >> {
+    class TelemetryData << (S,Aquamarine) >> {
     }
     class Thingsboard << (S,Aquamarine) >> {
         - user string
@@ -67,7 +67,7 @@ namespace thingsboard {
         + GetTenantDevice(name string) (*Device, error)
         + GetDeviceByName(name string) (*Device, error)
         + GetTenantDevices(pageSize int, page int) (GetTenantDevices, error)
-        + SaveTelemetry(deviceToken string, t Telemetry) error
+        + SaveTelemetry(deviceToken string, td TelemetryData) error
         + Connect() error
         + Disconnect() error
 
