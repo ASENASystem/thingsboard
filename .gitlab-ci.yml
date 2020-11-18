@@ -28,10 +28,10 @@ format:
     - go vet $(go list ./... | grep -v /vendor/)
     - go test -race $(go list ./... | grep -v /vendor/)
 
-compile:
-  stage: build
-  script:
-    - go build -race -ldflags "-extldflags '-static'" -o $CI_PROJECT_DIR/thingsboard
-  artifacts:
-    paths:
-      - thingsboard
+# compile:
+  # stage: build
+  # script:
+    # - go build -race -ldflags "-extldflags '-static'" -o $CI_PROJECT_DIR/thingsboard
+  # artifacts:
+    # paths:
+      # - thingsboard

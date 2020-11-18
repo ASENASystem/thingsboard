@@ -1,2 +1,5 @@
 test.sh
-thingsboard
+.idea
+.DS_Store
+.vscode
+debug
