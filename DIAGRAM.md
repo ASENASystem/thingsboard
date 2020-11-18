@@ -74,7 +74,7 @@ namespace thingsboard {
         + GetTenantDevice(name string) (*Device, error)
         + GetDeviceByName(name string) (*Device, error)
         + GetTenantDevices(pageSize int, page int) (GetTenantDevices, error)
-        + SaveTelemetry(deviceToken string, t <font color=blue>interface</font>{}) error
+        + SaveTelemetry(deviceToken string, telemetryData <font color=blue>interface</font>{}) error
         + Connect() error
         + Disconnect() error
 

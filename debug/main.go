@@ -56,8 +56,8 @@ func main() {
 	devices["test2"] = ""
 
 	cc := cubeCell{
-		Battery:  "4.321",
-		Distance: "167",
+		Battery:  "4.666",
+		Distance: "160",
 	}
 
 	for deviceName := range devices {
@@ -68,7 +68,7 @@ func main() {
 		devices[deviceName] = token
 
 		fmt.Println(cc)
-		err = tb.SaveTelemetry(devices["test"], cc)
+		err = tb.SaveTelemetry(devices[deviceName], cc)
 		if err != nil {
 			fmt.Println(err)
 		}
