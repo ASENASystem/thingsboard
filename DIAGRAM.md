@@ -1,14 +1,5 @@
 ```plantuml
 @startuml
-namespace main {
-    class cubeCell << (S,Aquamarine) >> {
-        + Battery string
-        + Distance string
-
-    }
-}
-
-
 namespace thingsboard {
     class Customer << (S,Aquamarine) >> {
     }
